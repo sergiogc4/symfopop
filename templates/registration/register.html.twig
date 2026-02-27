@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Registre - SymfoPop{% endblock %}
+
+{% block body %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card mt-4">
+            <div class="card-header">
+                <h3 class="mb-0">Crear compte</h3>
+            </div>
+            <div class="card-body">
+                {{ form_errors(registrationForm) }}
+                {{ form_start(registrationForm) }}
+                    <div class="mb-3">
+                        {{ form_label(registrationForm.name) }}
+                        {{ form_widget(registrationForm.name) }}
+                        {{ form_errors(registrationForm.name) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form_label(registrationForm.email) }}
+                        {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(registrationForm.email) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form_label(registrationForm.plainPassword) }}
+                        {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(registrationForm.plainPassword) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form_widget(registrationForm.agreeTerms) }}
+                        {{ form_label(registrationForm.agreeTerms) }}
+                        {{ form_errors(registrationForm.agreeTerms) }}
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Registrar-se</button>
+                {{ form_end(registrationForm) }}
+                <hr>
+                <p class="text-center">Ja tens compte? <a href="{{ path('app_login') }}">Inicia sessió</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

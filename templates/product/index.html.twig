@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title|default('Productes') }} - SymfoPop{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>{{ title|default('Productes') }}</h1>
+    {% if show_new_button|default(false) %}
+        <a href="{{ path('app_product_new') }}" class="btn btn-success">+ Nou producte</a>
+    {% endif %}
+</div>
+
+{% if products is empty %}
+    <div class="alert alert-info">{{ empty_message|default('No hi ha productes.') }}</div>
+{% else %}
+    <div class="row">
+        {% for product in products %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="{{ product.image }}" class="card-img-top" alt="{{ product.title }}" style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.title }}</h5>
+                    <p class="card-text">{{ product.description|slice(0, 100) }}...</p>
+                    <p class="card-text">
+                        <strong class="text-success">{{ product.price|number_format(2, ',', '.') }} €</strong>
+                    </p>
+                    <p class="card-text">
+                        <small class="text-muted">
+                            Per {{ product.owner.name }} · {{ product.createdAt|date('d/m/Y') }}
+                        </small>
+                    </p>
+                </div>
+                <div class="card-footer d-flex gap-2">
+                    <a href="{{ path('app_product_show', {id: product.id}) }}" class="btn btn-primary btn-sm">Veure</a>
+                    {% if show_actions|default(false) and app.user == product.owner %}
+                        <a href="{{ path('app_product_edit', {id: product.id}) }}" class="btn btn-warning btn-sm">Editar</a>
+                        <form method="post" action="{{ path('app_product_delete', {id: product.id}) }}" onsubmit="return confirm('Segur que vols esborrar aquest producte?')">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
+                            <button class="btn btn-danger btn-sm">Esborrar</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endif %}
+{% endblock %}
